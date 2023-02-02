@@ -46,14 +46,6 @@ class FacebookAdsPlugin : FlutterPlugin, MethodCallHandler {
             "logPurchase" -> handlePurchased(call, result)
 
         }
-
-
-//        if (call.method == "getPlatformVersion") {
-//            logger.logEvent("sentFriendRequest");
-//
-//        } else {
-//            result.notImplemented()
-//        }
     }
 
 
@@ -67,7 +59,7 @@ class FacebookAdsPlugin : FlutterPlugin, MethodCallHandler {
         val parameterBundle = createBundleFromMap(parameters) ?: Bundle()
 
         logger.logPurchase(amount, currency, parameterBundle)
-        result.success(null)
+        result.success(true)
     }
 
     /**
@@ -85,7 +77,7 @@ class FacebookAdsPlugin : FlutterPlugin, MethodCallHandler {
         val country = call.argument("country") as? Int ?: 0
         val state = call.argument("state") as? Int ?: 0
         FacebookSdk.setDataProcessingOptions(options.toTypedArray(), country, state)
-        result.success(null)
+        result.success(true)
     }
 
     /**
@@ -94,7 +86,7 @@ class FacebookAdsPlugin : FlutterPlugin, MethodCallHandler {
     private fun handleSetAutoLogAppEventsEnabled(call: MethodCall, result: Result) {
         val enabled = call.arguments as Boolean
         FacebookSdk.setAutoLogAppEventsEnabled(enabled)
-        result.success(null)
+        result.success(true)
     }
 
     /**
@@ -103,6 +95,7 @@ class FacebookAdsPlugin : FlutterPlugin, MethodCallHandler {
     private fun handleSetUserId(call: MethodCall, result: Result) {
         val userId = call.argument("userId") as? String
         AppEventsLogger.setUserID(userId)
+        result.success(true)
     }
 
     /**
@@ -126,7 +119,7 @@ class FacebookAdsPlugin : FlutterPlugin, MethodCallHandler {
     private fun handleLogEvent(call: MethodCall, result: Result) {
         val eName = call.argument("name") as? String
         val eParams = call.argument("parameters") as? Map<String, Objects>
-        val eValueToSum = call.argument("_valueToSum") as? Double
+        val eValueToSum = call.argument("valueToSum") as? Double
         if (eParams != null && eValueToSum != null) {
             val parameterBundle = createBundleFromMap(eParams)
             logger.logEvent(eName, eValueToSum, parameterBundle)
@@ -138,6 +131,7 @@ class FacebookAdsPlugin : FlutterPlugin, MethodCallHandler {
         } else {
             logger.logEvent(eName)
         }
+        result.success(true)
     }
 
     /**
@@ -183,7 +177,7 @@ class FacebookAdsPlugin : FlutterPlugin, MethodCallHandler {
             parameterBundle?.getString("country")
         )
 
-        result.success(null)
+        result.success("")
     }
 
     /**

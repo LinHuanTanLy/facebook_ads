@@ -110,4 +110,23 @@ class MethodChannelFacebookAds extends FacebookAdsPlatform {
     return await methodChannel.invokeMethod<bool>("logPurchase",
         {"amount": amount, "currency": currency, "parameters": parameters});
   }
+
+  @override
+  Future<bool?> logAddToCart(
+      String? id, String? type, String currency, double price) async {
+    return await methodChannel.invokeMethod<bool>("logAddToCart",
+        {"type": type, "id": id, "currency": currency, "price": price});
+  }
+
+  @override
+  Future<bool?> logViewContent(String? content, String? id, String? type,
+      String currency, double price) async {
+    return await methodChannel.invokeMethod<bool>("logViewContent", {
+      "type": type,
+      "id": id,
+      "currency": currency,
+      "price": price,
+      "content": content
+    });
+  }
 }

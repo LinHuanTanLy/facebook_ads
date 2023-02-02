@@ -4,12 +4,14 @@ import android.os.Bundle
 import com.facebook.FacebookSdk;
 import com.facebook.appevents.AppEventsLogger;
 import androidx.annotation.NonNull
+import com.facebook.appevents.AppEventsConstants
 
 import io.flutter.embedding.engine.plugins.FlutterPlugin
 import io.flutter.plugin.common.MethodCall
 import io.flutter.plugin.common.MethodChannel
 import io.flutter.plugin.common.MethodChannel.MethodCallHandler
 import io.flutter.plugin.common.MethodChannel.Result
+import java.math.BigDecimal
 import java.util.*
 
 /** FacebookAdsPlugin */
@@ -44,8 +46,33 @@ class FacebookAdsPlugin : FlutterPlugin, MethodCallHandler {
             "setDataProcessingOptions" -> handleSetDataProcessingOptions(call, result)
             "getAnonymousId" -> handleGetAnonymousId(call, result)
             "logPurchase" -> handlePurchased(call, result)
+            "logViewContent" -> handleLogViewContent(call, result)
+            "logAddToCart" -> handleLogAddToCart(call, result)
+
 
         }
+    }
+
+    /**
+     * 加入购物车
+     */
+    private fun handleLogAddToCart(call: MethodCall, result: Result) {
+        val id = call.argument("id") as? String
+        val type = call.argument("type") as? String
+        val currency = call.argument("currency") as? String
+        val price = call.argument("price") as? BigDecimal
+
+        val map = mapOf<String, Any?>(
+            "id" to id,
+            "type" to type,
+            "currency" to currency,
+            "price" to price,
+        )
+        val parameterBundle = createBundleFromMap(map)
+        logger.logEvent(
+            AppEventsConstants.EVENT_NAME_ADDED_TO_CART, parameters = parameterBundle
+        )
+        result.success(true)
     }
 
 
@@ -88,6 +115,32 @@ class FacebookAdsPlugin : FlutterPlugin, MethodCallHandler {
         FacebookSdk.setAutoLogAppEventsEnabled(enabled)
         result.success(true)
     }
+
+    /**
+     * ViewContent事件
+     */
+    private fun handleLogViewContent(call: MethodCall, result: Result) {
+
+        val content = call.argument("content") as? String
+        val id = call.argument("id") as? String
+        val type = call.argument("type") as? String
+        val currency = call.argument("currency") as? String
+        val price = call.argument("currency") as? BigDecimal
+
+        val map = mapOf<String, Any?>(
+            "content" to content,
+            "id" to id,
+            "type" to type,
+            "currency" to currency,
+            "price" to price,
+        )
+        val parameterBundle = createBundleFromMap(map)
+        logger.logEvent(
+            AppEventsConstants.EVENT_NAME_VIEWED_CONTENT, parameters = parameterBundle
+        )
+        result.success(true)
+    }
+
 
     /**
      * 设置用户id
@@ -197,7 +250,7 @@ class FacebookAdsPlugin : FlutterPlugin, MethodCallHandler {
     }
 
 
-    private fun createBundleFromMap(parameterMap: Map<String, Any>?): Bundle? {
+    private fun createBundleFromMap(parameterMap: Map<String, Any?>?): Bundle? {
         if (parameterMap == null) {
             return null
         }
@@ -221,7 +274,7 @@ class FacebookAdsPlugin : FlutterPlugin, MethodCallHandler {
                 bundle.putBundle(key, nestedBundle as Bundle)
             } else {
                 throw IllegalArgumentException(
-                    "Unsupported value type: " + value.javaClass.kotlin
+                    "Unsupported value type: " + value?.javaClass?.kotlin
                 )
             }
         }

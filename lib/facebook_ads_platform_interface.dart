@@ -94,4 +94,14 @@ abstract class FacebookAdsPlatform extends PlatformInterface {
       double? amount, String? currency, Map<String, dynamic> parameters) {
     throw UnimplementedError('logPurchase() has not been implemented.');
   }
+
+  Future<bool?> logViewContent(String? content, String? id, String? type,
+      String currency, double price) {
+    throw UnimplementedError('logViewContent() has not been implemented.');
+  }
+
+  Future<bool?> logAddToCart(
+      String? id, String? type, String currency, double price) {
+    throw UnimplementedError('logAddToCart() has not been implemented.');
+  }
 }

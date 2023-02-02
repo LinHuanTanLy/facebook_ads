@@ -75,11 +75,23 @@ class FacebookAds {
   }
 
   Future<String?> getAnonymousId() {
-    throw UnimplementedError('getAnonymousId() has not been implemented.');
+    return FacebookAdsPlatform.instance.getAnonymousId();
   }
 
   Future<bool?> logPurchase(
       double? amount, String? currency, Map<String, dynamic> parameters) {
-    throw UnimplementedError('logPurchase() has not been implemented.');
+    return FacebookAdsPlatform.instance
+        .logPurchase(amount, currency, parameters);
+  }
+
+  Future<bool?> logViewContent(String? content, String? id, String? type,
+      String currency, double price) {
+    return FacebookAdsPlatform.instance
+        .logViewContent(content, id, type, currency, price);
+  }
+
+  Future<bool?> logAddToCart(
+      String? id, String? type, String currency, double price) {
+    return FacebookAdsPlatform.instance.logAddToCart(id, type, currency, price);
   }
 }

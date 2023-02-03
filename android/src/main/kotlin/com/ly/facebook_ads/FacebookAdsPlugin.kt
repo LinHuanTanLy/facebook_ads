@@ -1,7 +1,6 @@
 package com.ly.facebook_ads
 
 import android.os.Bundle
-import android.util.Log
 import com.facebook.FacebookSdk;
 import com.facebook.appevents.AppEventsLogger;
 import androidx.annotation.NonNull
@@ -12,7 +11,6 @@ import io.flutter.plugin.common.MethodCall
 import io.flutter.plugin.common.MethodChannel
 import io.flutter.plugin.common.MethodChannel.MethodCallHandler
 import io.flutter.plugin.common.MethodChannel.Result
-import java.math.BigDecimal
 import java.util.*
 
 /** FacebookAdsPlugin */
@@ -49,8 +47,6 @@ class FacebookAdsPlugin : FlutterPlugin, MethodCallHandler {
             "logPurchase" -> handlePurchased(call, result)
             "logViewContent" -> handleLogViewContent(call, result)
             "logAddToCart" -> handleLogAddToCart(call, result)
-
-
         }
     }
 

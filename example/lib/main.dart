@@ -87,6 +87,14 @@ class _MyAppState extends State<MyApp> {
                 },
                 child: const Text('setUserID'),
               ),
+              MaterialButton(
+                onPressed: () {
+                  _facebookAdsPlugin
+                      .logViewContent("content","id","type","currency",10086)
+                      .then((value) => debugPrint("logViewContent--$value"));
+                },
+                child: const Text('logViewContent'),
+              ),
             ],
           ),
         ),

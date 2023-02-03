@@ -1,6 +1,7 @@
 package com.ly.facebook_ads
 
 import android.os.Bundle
+import android.util.Log
 import com.facebook.FacebookSdk;
 import com.facebook.appevents.AppEventsLogger;
 import androidx.annotation.NonNull
@@ -60,7 +61,7 @@ class FacebookAdsPlugin : FlutterPlugin, MethodCallHandler {
         val id = call.argument("id") as? String
         val type = call.argument("type") as? String
         val currency = call.argument("currency") as? String
-        val price = call.argument("price") as? BigDecimal
+        val price = call.argument("price")  as? Double
 
         val map = mapOf<String, Any?>(
             "id" to id,
@@ -125,7 +126,7 @@ class FacebookAdsPlugin : FlutterPlugin, MethodCallHandler {
         val id = call.argument("id") as? String
         val type = call.argument("type") as? String
         val currency = call.argument("currency") as? String
-        val price = call.argument("currency") as? BigDecimal
+        val price = call.argument("price") as? Double
 
         val map = mapOf<String, Any?>(
             "content" to content,

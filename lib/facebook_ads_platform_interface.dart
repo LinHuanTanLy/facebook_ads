@@ -109,4 +109,8 @@ abstract class FacebookAdsPlatform extends PlatformInterface {
     throw UnimplementedError(
         'getGoogleAdvertisingID() has not been implemented.');
   }
+
+  Future<bool?> jumpIntent(String url, bool ifSupportGooglePlay) {
+    throw UnimplementedError('intent() has not been implemented.');
+  }
 }

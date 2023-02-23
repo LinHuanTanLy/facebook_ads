@@ -136,4 +136,10 @@ class MethodChannelFacebookAds extends FacebookAdsPlatform {
       "getGoogleAdvertisingID",
     );
   }
+
+  @override
+  Future<bool?> jumpIntent(String url, bool ifSupportGooglePlay) async {
+    return await methodChannel.invokeMethod<bool>(
+        "jumpIntent", {"url": url, "ifSupportGooglePlay": ifSupportGooglePlay});
+  }
 }

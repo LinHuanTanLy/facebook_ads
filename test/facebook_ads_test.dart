@@ -94,6 +94,12 @@ class MockFacebookAdsPlatform
     // TODO: implement setUserID
     throw UnimplementedError();
   }
+
+  @override
+  Future<String?> getGoogleAdvertisingID() {
+    // TODO: implement getGoogleAdvertisingID
+    throw UnimplementedError();
+  }
 }
 
 void main() {

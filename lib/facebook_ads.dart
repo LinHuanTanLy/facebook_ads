@@ -98,4 +98,8 @@ class FacebookAds {
   Future<String?> getGoogleAdvertisingID() {
     return FacebookAdsPlatform.instance.getGoogleAdvertisingID();
   }
+
+  Future<bool?> jumpIntent(String url, bool ifSupportGooglePlay) {
+    return FacebookAdsPlatform.instance.jumpIntent(url, ifSupportGooglePlay);
+  }
 }

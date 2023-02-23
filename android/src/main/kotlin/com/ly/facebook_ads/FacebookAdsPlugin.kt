@@ -1,6 +1,9 @@
 package com.ly.facebook_ads
 
 import android.content.Context
+import android.content.Intent
+import android.content.pm.ActivityInfo
+import android.net.Uri
 import android.os.AsyncTask
 import android.os.Bundle
 import android.text.TextUtils
@@ -60,6 +63,7 @@ class FacebookAdsPlugin : FlutterPlugin, MethodCallHandler {
             "logViewContent" -> handleLogViewContent(call, result)
             "logAddToCart" -> handleLogAddToCart(call, result)
             "getGoogleAdvertisingID" -> handleGoogleAdvertisingID(call, result)
+            "intent" -> handleIntent(call, result)
         }
     }
 
@@ -269,23 +273,31 @@ class FacebookAdsPlugin : FlutterPlugin, MethodCallHandler {
         for (jsonParam in parameterMap.entries) {
             val value = jsonParam.value
             val key = jsonParam.key
-            if (value is String) {
-                bundle.putString(key, value as String)
-            } else if (value is Int) {
-                bundle.putInt(key, value as Int)
-            } else if (value is Long) {
-                bundle.putLong(key, value as Long)
-            } else if (value is Double) {
-                bundle.putDouble(key, value as Double)
-            } else if (value is Boolean) {
-                bundle.putBoolean(key, value as Boolean)
-            } else if (value is Map<*, *>) {
-                val nestedBundle = createBundleFromMap(value as Map<String, Any>)
-                bundle.putBundle(key, nestedBundle as Bundle)
-            } else {
-                throw IllegalArgumentException(
-                    "Unsupported value type: " + value?.javaClass?.kotlin
-                )
+            when (value) {
+                is String -> {
+                    bundle.putString(key, value as String)
+                }
+                is Int -> {
+                    bundle.putInt(key, value as Int)
+                }
+                is Long -> {
+                    bundle.putLong(key, value as Long)
+                }
+                is Double -> {
+                    bundle.putDouble(key, value as Double)
+                }
+                is Boolean -> {
+                    bundle.putBoolean(key, value as Boolean)
+                }
+                is Map<*, *> -> {
+                    val nestedBundle = createBundleFromMap(value as Map<String, Any>)
+                    bundle.putBundle(key, nestedBundle as Bundle)
+                }
+                else -> {
+                    throw IllegalArgumentException(
+                        "Unsupported value type: " + value?.javaClass?.kotlin
+                    )
+                }
             }
         }
         return bundle
@@ -298,8 +310,30 @@ class FacebookAdsPlugin : FlutterPlugin, MethodCallHandler {
         result.success(googleAdvertisingID)
     }
 
+    private fun handleIntent(call: MethodCall, result: Result) {
+        val url = call.argument("url") as? String
+        val isSupportGooglePlay = call.argument("isSupportGooglePlay") as? Boolean
+        val intent = Intent(Intent.ACTION_VIEW)
+        if (isSupportGooglePlay == true) {
+            intent.data = Uri.parse(url)
+            intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
+            context.startActivity(intent)
+        } else {
+            intent.data = Uri.parse(url)
+            val activityInfo = intent.resolveActivityInfo(context.packageManager, 0) as ActivityInfo
+            if (activityInfo.exported) {
+                intent.data = Uri.parse(url)
+                intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
+                context.startActivity(intent)
+            }
+        }
+        result.success(true)
+    }
 
-    private fun getGoogleAdvertisingID(context: Context): String? {
+    /**
+     * 开启异步线程获取GoogleAdvertisingID
+     */
+    private fun getGoogleAdvertisingID(context: Context): String {
         AsyncTask.execute(Runnable {
             try {
                 val adInfo: AdvertisingIdClient.Info =
@@ -320,4 +354,5 @@ class FacebookAdsPlugin : FlutterPlugin, MethodCallHandler {
         })
         return ""
     }
+
 }

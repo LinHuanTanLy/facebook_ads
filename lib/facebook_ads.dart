@@ -94,4 +94,8 @@ class FacebookAds {
       String? id, String? type, String currency, double price) {
     return FacebookAdsPlatform.instance.logAddToCart(id, type, currency, price);
   }
+
+  Future<String?> getGoogleAdvertisingID() {
+    return FacebookAdsPlatform.instance.getGoogleAdvertisingID();
+  }
 }

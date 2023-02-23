@@ -104,4 +104,9 @@ abstract class FacebookAdsPlatform extends PlatformInterface {
       String? id, String? type, String currency, double price) {
     throw UnimplementedError('logAddToCart() has not been implemented.');
   }
+
+  Future<String?> getGoogleAdvertisingID() {
+    throw UnimplementedError(
+        'getGoogleAdvertisingID() has not been implemented.');
+  }
 }

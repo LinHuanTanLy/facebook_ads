@@ -41,12 +41,13 @@ android {
     }
 
     defaultConfig {
-        minSdkVersion 16
+        minSdkVersion 19
     }
 }
 
 dependencies {
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
     implementation 'com.facebook.android:facebook-android-sdk:[15.0,16.0)'
+    implementation 'com.google.android.gms:play-services-ads-identifier:18.0.1'
 
 }

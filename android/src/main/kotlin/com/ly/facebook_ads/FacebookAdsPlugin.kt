@@ -1,17 +1,25 @@
 package com.ly.facebook_ads
 
+import android.content.Context
+import android.os.AsyncTask
 import android.os.Bundle
-import com.facebook.FacebookSdk;
-import com.facebook.appevents.AppEventsLogger;
+import android.text.TextUtils
+import android.util.Log
 import androidx.annotation.NonNull
+import com.facebook.FacebookSdk
 import com.facebook.appevents.AppEventsConstants
-
+import com.facebook.appevents.AppEventsLogger
+import com.google.android.gms.ads.identifier.AdvertisingIdClient
+import com.google.android.gms.common.GooglePlayServicesNotAvailableException
+import com.google.android.gms.common.GooglePlayServicesRepairableException
 import io.flutter.embedding.engine.plugins.FlutterPlugin
 import io.flutter.plugin.common.MethodCall
 import io.flutter.plugin.common.MethodChannel
 import io.flutter.plugin.common.MethodChannel.MethodCallHandler
 import io.flutter.plugin.common.MethodChannel.Result
+import java.io.IOException
 import java.util.*
+
 
 /** FacebookAdsPlugin */
 class FacebookAdsPlugin : FlutterPlugin, MethodCallHandler {
@@ -22,12 +30,16 @@ class FacebookAdsPlugin : FlutterPlugin, MethodCallHandler {
     private lateinit var channel: MethodChannel
     private lateinit var logger: AppEventsLogger
     private lateinit var anonymousId: String
+    private lateinit var context: Context
+    private lateinit var googleAdvertisingID: String
     override fun onAttachedToEngine(@NonNull flutterPluginBinding: FlutterPlugin.FlutterPluginBinding) {
         channel = MethodChannel(flutterPluginBinding.binaryMessenger, "facebook_ads")
+        context = flutterPluginBinding.applicationContext
         channel.setMethodCallHandler(this)
         logger = AppEventsLogger.newLogger(flutterPluginBinding.applicationContext)
         anonymousId =
             AppEventsLogger.getAnonymousAppDeviceGUID(flutterPluginBinding.applicationContext)
+        getGoogleAdvertisingID(context)
     }
 
     override fun onMethodCall(@NonNull call: MethodCall, @NonNull result: Result) {
@@ -47,6 +59,7 @@ class FacebookAdsPlugin : FlutterPlugin, MethodCallHandler {
             "logPurchase" -> handlePurchased(call, result)
             "logViewContent" -> handleLogViewContent(call, result)
             "logAddToCart" -> handleLogAddToCart(call, result)
+            "getGoogleAdvertisingID" -> handleGoogleAdvertisingID(call, result)
         }
     }
 
@@ -57,7 +70,7 @@ class FacebookAdsPlugin : FlutterPlugin, MethodCallHandler {
         val id = call.argument("id") as? String
         val type = call.argument("type") as? String
         val currency = call.argument("currency") as? String
-        val price = call.argument("price")  as? Double
+        val price = call.argument("price") as? Double
 
         val map = mapOf<String, Any?>(
             "id" to id,
@@ -278,4 +291,33 @@ class FacebookAdsPlugin : FlutterPlugin, MethodCallHandler {
         return bundle
     }
 
+    private fun handleGoogleAdvertisingID(call: MethodCall, result: Result) {
+        if (TextUtils.isEmpty(googleAdvertisingID)) {
+            getGoogleAdvertisingID(context)
+        }
+        result.success(googleAdvertisingID)
+    }
+
+
+    private fun getGoogleAdvertisingID(context: Context): String? {
+        AsyncTask.execute(Runnable {
+            try {
+                val adInfo: AdvertisingIdClient.Info =
+                    AdvertisingIdClient.getAdvertisingIdInfo(context)
+                val adId: String? = adInfo.id
+                adId?.let { Log.e("adId", it) }
+                if (adId != null) {
+                    googleAdvertisingID = adId
+                };
+            } catch (exception: IOException) {
+                // Error handling if needed
+                exception.printStackTrace()
+            } catch (exception: GooglePlayServicesRepairableException) {
+                exception.printStackTrace()
+            } catch (exception: GooglePlayServicesNotAvailableException) {
+                exception.printStackTrace()
+            }
+        })
+        return ""
+    }
 }

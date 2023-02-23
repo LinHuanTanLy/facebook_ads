@@ -129,4 +129,11 @@ class MethodChannelFacebookAds extends FacebookAdsPlatform {
       "content": content
     });
   }
+
+  @override
+  Future<String?> getGoogleAdvertisingID() async {
+    return await methodChannel.invokeMethod<String?>(
+      "getGoogleAdvertisingID",
+    );
+  }
 }

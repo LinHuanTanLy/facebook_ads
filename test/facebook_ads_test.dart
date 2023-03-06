@@ -7,7 +7,6 @@ import 'package:plugin_platform_interface/plugin_platform_interface.dart';
 class MockFacebookAdsPlatform
     with MockPlatformInterfaceMixin
     implements FacebookAdsPlatform {
-
   @override
   Future<String?> getPlatformVersion() => Future.value('42');
 
@@ -42,31 +41,36 @@ class MockFacebookAdsPlatform
   }
 
   @override
-  Future<bool?> logAddToCart(String? id, String? type, String currency, double price) {
+  Future<bool?> logAddToCart(
+      String? id, String? type, String currency, double price) {
     // TODO: implement logAddToCart
     throw UnimplementedError();
   }
 
   @override
-  Future<bool?> logEvent(String name, {Map<String, dynamic>? parameters, double? valueToSum}) {
+  Future<bool?> logEvent(String name,
+      {Map<String, dynamic>? parameters, double? valueToSum}) {
     // TODO: implement logEvent
     throw UnimplementedError();
   }
 
   @override
-  Future<bool?> logPurchase(double? amount, String? currency, Map<String, dynamic> parameters) {
+  Future<bool?> logPurchase(
+      double? amount, String? currency, Map<String, dynamic> parameters) {
     // TODO: implement logPurchase
     throw UnimplementedError();
   }
 
   @override
-  Future<bool?> logPushNotificationOpen({Map<String, dynamic>? payload, String? action}) {
+  Future<bool?> logPushNotificationOpen(
+      {Map<String, dynamic>? payload, String? action}) {
     // TODO: implement logPushNotificationOpen
     throw UnimplementedError();
   }
 
   @override
-  Future<bool?> logViewContent(String? content, String? id, String? type, String currency, double price) {
+  Future<bool?> logViewContent(String? content, String? id, String? type,
+      String currency, double price) {
     // TODO: implement logViewContent
     throw UnimplementedError();
   }
@@ -78,13 +82,24 @@ class MockFacebookAdsPlatform
   }
 
   @override
-  Future<bool?> setDataProcessingOptions(List<String> options, String? country, String? state) {
+  Future<bool?> setDataProcessingOptions(
+      List<String> options, String? country, String? state) {
     // TODO: implement setDataProcessingOptions
     throw UnimplementedError();
   }
 
   @override
-  Future<String?> setUserData({String? email, String? firstName, String? lastName, String? phone, String? dateOfBirth, String? gender, String? city, String? state, String? zip, String? country}) {
+  Future<String?> setUserData(
+      {String? email,
+      String? firstName,
+      String? lastName,
+      String? phone,
+      String? dateOfBirth,
+      String? gender,
+      String? city,
+      String? state,
+      String? zip,
+      String? country}) {
     // TODO: implement setUserData
     throw UnimplementedError();
   }
@@ -98,6 +113,12 @@ class MockFacebookAdsPlatform
   @override
   Future<String?> getGoogleAdvertisingID() {
     // TODO: implement getGoogleAdvertisingID
+    throw UnimplementedError();
+  }
+
+  @override
+  Future<bool?> jumpIntent(String url, bool ifSupportGooglePlay) {
+    // TODO: implement jumpIntent
     throw UnimplementedError();
   }
 }
